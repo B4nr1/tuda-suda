@@ -25,7 +25,10 @@ public class TileManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        var xInput = Input.GetAxisRaw("Horizontal");
+        var yInput = Input.GetAxisRaw("Vertical");
 
+        TryMove(Mathf.RoundToInt(xInput), Mathf.RoundToInt(yInput));
     }
 
     private void GetTilePositions()
@@ -84,5 +87,102 @@ public class TileManager : MonoBehaviour
             for (int y = 0; y < GridSize; y++)
                 if (_tiles[x, y] != null)
                     _tiles[x, y].transform.position = _tilePositions[x, y].position;
+    }
+
+    private void TryMove(int x, int y)
+    {
+        if (x == 0 && y == 0)
+            return;
+
+        if(Mathf.Abs(x) == 1 && Mathf.Abs(y) == 1)
+        {
+            Debug.LogWarning($"Invalid move {x},{y}");
+            return;
+        }
+
+        if(x == 0)
+        {
+            if (y > 0)
+                TryMoveUp();
+            else
+                TryMoveDown();
+        }
+        else
+        {
+            if (x < 0)
+                TryMoveLeft();
+            else
+                TryMoveRight();
+        }
+        UpdateTilePositions();
+    }
+
+    private void TryMoveRight()
+    {
+        for (int y = 0; y < GridSize; y++)
+            for (int x = GridSize - 1; x >= 0; x--)
+            {
+                if (_tiles[x, y] == null) continue;
+                for (int x2 = GridSize - 1; x2 > x; x2--)
+                {
+                    if (_tiles[x2, y] != null) continue;
+
+                    _tiles[x2, y] = _tiles[x, y];
+                    _tiles[x, y] = null;
+                    break;
+                }
+            }
+    }
+
+    private void TryMoveLeft()
+    {
+      for(int y=0;y<GridSize;y++)
+            for(int x = 0;x<GridSize;x++)
+            {
+                if (_tiles[x, y] == null) continue;
+                for(int x2=0;x2<x;x2++)
+                {
+                    if (_tiles[x2, y] != null) continue;
+
+                    _tiles[x2, y] = _tiles[x, y];
+                    _tiles[x, y] = null;
+                    break;
+                }
+            }
+    }
+
+    private void TryMoveDown()
+    {
+        for (int x = 0; x < GridSize; x++)
+            for (int y = GridSize - 1; y >= 0; y--)
+            {
+                if (_tiles[x, y] == null) continue;
+                for (int y2 = GridSize - 1; y2 > y; y2--) 
+                {
+                    if (_tiles[x, y2] != null) continue;
+
+                    _tiles[x, y2] = _tiles[x, y];
+                    _tiles[x, y] = null;
+                    break;
+                }
+
+            }    
+    }
+
+    private void TryMoveUp()
+    {
+        for (int x=0;x<GridSize;x++)
+            for(int y=0;y<GridSize;y++)
+            {
+                if (_tiles[x, y] == null) continue;
+                for(int y2=0;y2<y;y2++)
+                {
+                    if (_tiles[x, y2] != null) continue;
+
+                    _tiles[x, y2] = _tiles[x, y];
+                    _tiles[x, y] = null;
+                    break;
+                }
+            }
     }
 }
