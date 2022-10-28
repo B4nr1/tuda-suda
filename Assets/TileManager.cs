@@ -26,13 +26,25 @@ public class TileManager : MonoBehaviour
         UpdateTilePositions(true);
     }
 
+    private int _lastXImput;
+    private int _lastYImput;
+
     // Update is called once per frame
     void Update()
     {
-        var xInput = Input.GetAxisRaw("Horizontal");
-        var yInput = Input.GetAxisRaw("Vertical");
-        if (!_isAnimating)
-        TryMove(Mathf.RoundToInt(xInput), Mathf.RoundToInt(yInput));
+        var xInput = Mathf.RoundToInt(Input.GetAxisRaw("Horizontal"));
+        var yInput = Mathf.RoundToInt(Input.GetAxisRaw("Vertical"));
+        
+        if(_lastXImput == 0 && _lastYImput == 0)
+        {
+            if (!_isAnimating)
+            TryMove(xInput, yInput);
+        }
+
+        _lastXImput = xInput;
+        _lastYImput = yInput;
+
+        
     }
 
     private void GetTilePositions()
@@ -100,6 +112,11 @@ public class TileManager : MonoBehaviour
     private IEnumerator WaitFoTileAnimation()
     {
         yield return new WaitForSeconds(tileSettings.animationTime);
+        if (!TrySpawnTile())
+        {
+            Debug.LogError("UNABLE TO SPAWN TILE");
+        }
+        UpdateTilePositions(true);
         _isAnimating = false;
     }
 
