@@ -153,6 +153,36 @@ public class TileManager : MonoBehaviour
             UpdateTilePositions(false);
     }
 
+    private bool TileExistsBetween(int x, int y, int x2, int y2)
+    {
+        if (x == x2)
+            return TileExistsBetweenVertical(x, y, y2);
+        else if (y == y2)
+            return TileExistsBetweenHorizontal(x, x2, y);
+
+        Debug.LogError($"BETWEEN CHECK - INVALID PARAMETERS ({x}, {y}) ({x2},{y2})");
+        return true;
+    }
+
+    private bool TileExistsBetweenHorizontal(int x, int x2, int y)
+    {
+        int minX = Mathf.Min(x, x2);
+        int maxX= Mathf.Max(x, x2);
+        for (int xIndex = minX + 1; xIndex < maxX; xIndex++)
+            if (_tiles[xIndex, y] != null)
+                return true;
+        return false;
+    }
+    private bool TileExistsBetweenVertical(int x, int y, int y2)
+    {
+        int minY = Mathf.Min(y, y2);
+        int maxY = Mathf.Max(y, y2);
+        for (int yIndex = minY + 1; yIndex < maxY; yIndex++)
+            if (_tiles[x, yIndex] != null)
+                return true;
+        return false;        
+    }
+
     private void TryMoveRight()
     {
         for (int y = 0; y < GridSize; y++)
@@ -163,6 +193,9 @@ public class TileManager : MonoBehaviour
                 {
                     if (_tiles[x2, y] != null)
                     {
+                        if (TileExistsBetween(x, y, x2, y))
+                            continue;
+
                         if (_tiles[x2, y].Merge(_tiles[x, y]))
                         {
                             _tiles[x, y] = null;
@@ -190,6 +223,9 @@ public class TileManager : MonoBehaviour
                 {
                     if (_tiles[x2, y] != null)
                     {
+                        if (TileExistsBetween(x, y, x2, y))
+                            continue;
+
                         if (_tiles[x2, y].Merge(_tiles[x, y]))
                         {
                             _tiles[x, y] = null;
@@ -217,6 +253,9 @@ public class TileManager : MonoBehaviour
                 {
                     if (_tiles[x, y2] != null)
                     {
+                        if (TileExistsBetween(x, y, x, y2))
+                            continue;
+
                         if (_tiles[x, y2].Merge(_tiles[x, y]))
                         {
                             _tiles[x, y] = null;
@@ -245,6 +284,9 @@ public class TileManager : MonoBehaviour
                 {
                     if (_tiles[x, y2] != null)
                     {
+                        if (TileExistsBetween(x, y, x, y2))
+                            continue;
+
                         if (_tiles[x, y2].Merge(_tiles[x, y]))
                         {
                             _tiles[x, y] = null;
