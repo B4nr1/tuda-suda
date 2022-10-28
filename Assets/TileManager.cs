@@ -12,7 +12,7 @@ public class TileManager : MonoBehaviour
 
     private readonly Tile[,] _tiles = new Tile[GridSize, GridSize];
 
-    [SerializeField]private Tile tilePrefab;
+    [SerializeField] private Tile tilePrefab;
 
     private bool _isAnimating;
 
@@ -34,17 +34,17 @@ public class TileManager : MonoBehaviour
     {
         var xInput = Mathf.RoundToInt(Input.GetAxisRaw("Horizontal"));
         var yInput = Mathf.RoundToInt(Input.GetAxisRaw("Vertical"));
-        
-        if(_lastXImput == 0 && _lastYImput == 0)
+
+        if (_lastXImput == 0 && _lastYImput == 0)
         {
             if (!_isAnimating)
-            TryMove(xInput, yInput);
+                TryMove(xInput, yInput);
         }
 
         _lastXImput = xInput;
         _lastYImput = yInput;
 
-        
+
     }
 
     private void GetTilePositions()
@@ -71,11 +71,11 @@ public class TileManager : MonoBehaviour
         for (int x = 0; x < GridSize; x++)
             for (int y = 0; y < GridSize; y++)
             {
-                if (_tiles[x,y] == null)
-                    availableSpots.Add(new Vector2Int(x,y));
+                if (_tiles[x, y] == null)
+                    availableSpots.Add(new Vector2Int(x, y));
             }
 
-        if(!availableSpots.Any())
+        if (!availableSpots.Any())
             return false;
 
         int randomIndex = Random.Range(0, availableSpots.Count);
@@ -99,7 +99,7 @@ public class TileManager : MonoBehaviour
 
     private void UpdateTilePositions(bool instant)
     {
-        if(!instant)
+        if (!instant)
         {
             _isAnimating = true;
             StartCoroutine(WaitFoTileAnimation());
@@ -127,7 +127,7 @@ public class TileManager : MonoBehaviour
         if (x == 0 && y == 0)
             return;
 
-        if(Mathf.Abs(x) == 1 && Mathf.Abs(y) == 1)
+        if (Mathf.Abs(x) == 1 && Mathf.Abs(y) == 1)
         {
             Debug.LogWarning($"Invalid move {x},{y}");
             return;
@@ -135,7 +135,7 @@ public class TileManager : MonoBehaviour
 
         _tilesUpdated = false;
 
-        if(x == 0)
+        if (x == 0)
         {
             if (y > 0)
                 TryMoveUp();
@@ -149,8 +149,8 @@ public class TileManager : MonoBehaviour
             else
                 TryMoveRight();
         }
-        if(_tilesUpdated)
-        UpdateTilePositions(false);
+        if (_tilesUpdated)
+            UpdateTilePositions(false);
     }
 
     private void TryMoveRight()
@@ -161,7 +161,16 @@ public class TileManager : MonoBehaviour
                 if (_tiles[x, y] == null) continue;
                 for (int x2 = GridSize - 1; x2 > x; x2--)
                 {
-                    if (_tiles[x2, y] != null) continue;
+                    if (_tiles[x2, y] != null)
+                    {
+                        if (_tiles[x2, y].Merge(_tiles[x, y]))
+                        {
+                            _tiles[x, y] = null;
+                            _tilesUpdated = true;
+                            break;
+                        }
+                        continue;
+                    }
 
                     _tilesUpdated = true;
                     _tiles[x2, y] = _tiles[x, y];
@@ -173,13 +182,22 @@ public class TileManager : MonoBehaviour
 
     private void TryMoveLeft()
     {
-      for(int y=0;y<GridSize;y++)
-            for(int x = 0;x<GridSize;x++)
+        for (int y = 0; y < GridSize; y++)
+            for (int x = 0; x < GridSize; x++)
             {
                 if (_tiles[x, y] == null) continue;
-                for(int x2=0;x2<x;x2++)
+                for (int x2 = 0; x2 < x; x2++)
                 {
-                    if (_tiles[x2, y] != null) continue;
+                    if (_tiles[x2, y] != null)
+                    {
+                        if (_tiles[x2, y].Merge(_tiles[x, y]))
+                        {
+                            _tiles[x, y] = null;
+                            _tilesUpdated = true;
+                            break;
+                        }
+                        continue;
+                    }
 
                     _tilesUpdated = true;
                     _tiles[x2, y] = _tiles[x, y];
@@ -195,9 +213,18 @@ public class TileManager : MonoBehaviour
             for (int y = GridSize - 1; y >= 0; y--)
             {
                 if (_tiles[x, y] == null) continue;
-                for (int y2 = GridSize - 1; y2 > y; y2--) 
+                for (int y2 = GridSize - 1; y2 > y; y2--)
                 {
-                    if (_tiles[x, y2] != null) continue;
+                    if (_tiles[x, y2] != null)
+                    {
+                        if (_tiles[x, y2].Merge(_tiles[x, y]))
+                        {
+                            _tiles[x, y] = null;
+                            _tilesUpdated = true;
+                            break;
+                        }
+                        continue;
+                    }
 
                     _tilesUpdated = true;
                     _tiles[x, y2] = _tiles[x, y];
@@ -205,18 +232,27 @@ public class TileManager : MonoBehaviour
                     break;
                 }
 
-            }    
+            }
     }
 
     private void TryMoveUp()
     {
-        for (int x=0;x<GridSize;x++)
-            for(int y=0;y<GridSize;y++)
+        for (int x = 0; x < GridSize; x++)
+            for (int y = 0; y < GridSize; y++)
             {
                 if (_tiles[x, y] == null) continue;
-                for(int y2=0;y2<y;y2++)
+                for (int y2 = 0; y2 < y; y2++)
                 {
-                    if (_tiles[x, y2] != null) continue;
+                    if (_tiles[x, y2] != null)
+                    {
+                        if (_tiles[x, y2].Merge(_tiles[x, y]))
+                        {
+                            _tiles[x, y] = null;
+                            _tilesUpdated = true;
+                            break;
+                        }
+                        continue;
+                    }
 
                     _tilesUpdated = true;
                     _tiles[x, y2] = _tiles[x, y];

@@ -4,16 +4,30 @@ using TMPro;
 using UnityEngine;
 
 public class Tile : MonoBehaviour
-{   
+{
     private int _value = 2;
 
-    [SerializeField]private TMP_Text text;
+    [SerializeField] private TMP_Text text;
+
     private Vector3 _startPos;
+
     private Vector3 _endPos;
+
     private bool _isAnimating;
+
     private float _count;
 
     [SerializeField] private TileSettings tileSettings;
+
+    private Tile _mergeTile;
+
+    private Animator _animator;
+
+    private void Start()
+    {
+        _animator = GetComponent<Animator>();
+    }
+
     public void SetValue(int value)
     {
         _value = value;
@@ -34,13 +48,22 @@ public class Tile : MonoBehaviour
         transform.position = newPos;
 
         if (_count >= tileSettings.animationTime)
+        {
             _isAnimating = false;
+            if (_mergeTile != null)
+            {
+                _animator.SetTrigger("Merge");
+                SetValue(_value + _mergeTile._value);
+                Destroy(_mergeTile.gameObject);
+                _mergeTile = null;
+            }
+        }
 
     }
 
-    public void SetPosition(Vector3 newPos,bool instant)
+    public void SetPosition(Vector3 newPos, bool instant)
     {
-        if(instant)
+        if (instant)
         {
             transform.position = newPos;
             return;
@@ -50,5 +73,18 @@ public class Tile : MonoBehaviour
         _endPos = newPos;
         _count = 0;
         _isAnimating = true;
+        if (_mergeTile != null)
+            _mergeTile.SetPosition(newPos, false);
+    }
+
+    public bool Merge(Tile otherTile)
+    {
+        if (this._value != otherTile._value)
+            return false;
+        if (_mergeTile != null || otherTile._mergeTile != null)
+            return false;
+
+        _mergeTile = otherTile;
+        return true;
     }
 }
