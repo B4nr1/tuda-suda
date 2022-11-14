@@ -47,6 +47,9 @@ public class TileManager : MonoBehaviour
 
     }
 
+        
+
+
     private void GetTilePositions()
     {
         LayoutRebuilder.ForceRebuildLayoutImmediate(GetComponent<RectTransform>());
