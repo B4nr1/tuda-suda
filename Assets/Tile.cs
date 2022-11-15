@@ -76,7 +76,7 @@ public class Tile : MonoBehaviour
         if (_mergeTile != null)
             _mergeTile.SetPosition(newPos, false);
     }
-
+    
     public bool Merge(Tile otherTile)
     {
         if (this._value != otherTile._value)
@@ -86,5 +86,9 @@ public class Tile : MonoBehaviour
 
         _mergeTile = otherTile;
         return true;
+    }
+    public int GetValue()
+    {
+        return _value;
     }
 }
