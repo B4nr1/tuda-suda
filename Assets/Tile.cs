@@ -84,9 +84,7 @@ public class Tile : MonoBehaviour
     
     public bool Merge(Tile otherTile)
     {
-        if (this._value != otherTile._value)
-            return false;
-        if (_mergeTile != null || otherTile._mergeTile != null)
+       if(!CanMerge(otherTile))
             return false;
 
         _mergeTile = otherTile;
@@ -96,4 +94,15 @@ public class Tile : MonoBehaviour
     {
         return _value;
     }
+
+    public bool CanMerge(Tile otherTile)
+    {
+        if (this._value != otherTile._value)
+            return false;
+        if (_mergeTile != null || otherTile._mergeTile != null)
+            return false;
+    
+        return true;
+    }
+   
 }

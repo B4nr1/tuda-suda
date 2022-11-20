@@ -14,17 +14,19 @@ public class TileManager : MonoBehaviour
 
     private readonly Tile[,] _tiles = new Tile[GridSize, GridSize];
 
-    [SerializeField] private Tile tilePrefab;    
+    [SerializeField] private Tile tilePrefab;
 
     [SerializeField] private TileSettings tileSettings;
 
     [SerializeField] private UnityEvent<int> scoreUpdated;
 
+    [SerializeField] private GameOverScreen gameOverScreen;
+
     private Stack<GameState> _gameStates = new Stack<GameState>();
 
     private bool _isAnimating;
     private int _score;
-    // Start is called before the first frame update
+   
     void Start()
     {
         GetTilePositions();
@@ -139,10 +141,21 @@ public class TileManager : MonoBehaviour
             Debug.LogError("UNABLE TO SPAWN TILE");
         }
         UpdateTilePositions(true);
+
+        if (!AnyMovesLeft())
+        {
+            gameOverScreen.SetGameOver(true);
+        }
+
         _isAnimating = false;
     }
 
     private bool _tilesUpdated;
+
+    public bool AnyMovesLeft() 
+    {
+        return CanMoveLeft() || CanMoveUp() || CanMoveRight() || CanMoveDown();
+    }
 
     private void TryMove(int x, int y)
     {
@@ -199,6 +212,8 @@ public class TileManager : MonoBehaviour
             return;
 
         GameState previosGameState = _gameStates.Pop();
+
+        gameOverScreen.SetGameOver(false);
 
         _score = previosGameState.score;
         scoreUpdated.Invoke(_score);
@@ -371,5 +386,110 @@ public class TileManager : MonoBehaviour
                     break;
                 }
             }
+    }
+    
+    private bool CanMoveRight()
+    {
+        for (int y = 0; y < GridSize; y++)
+            for (int x = GridSize - 1; x >= 0; x--)
+            {
+                if (_tiles[x, y] == null) continue;
+                for (int x2 = GridSize - 1; x2 > x; x2--)
+                {
+                    if (_tiles[x2, y] != null)
+                    {
+                        if (TileExistsBetween(x, y, x2, y))
+                            continue;
+
+                        if (_tiles[x2, y].CanMerge(_tiles[x, y]))
+                        {
+                            return true;
+                        }
+                        continue;
+                    }
+
+                    return true;
+                }
+            }
+        return false;
+    }
+
+    private bool CanMoveLeft()
+    {
+        for (int y = 0; y < GridSize; y++)
+            for (int x = 0; x < GridSize; x++)
+            {
+                if (_tiles[x, y] == null) continue;
+                for (int x2 = 0; x2 < x; x2++)
+                {
+                    if (_tiles[x2, y] != null)
+                    {
+                        if (TileExistsBetween(x, y, x2, y))
+                            continue;
+
+                        if (_tiles[x2, y].CanMerge(_tiles[x, y]))
+                        {
+                            return true;
+                        }
+                        continue;
+                    }
+
+                    return true;
+                }
+            }
+        return false;
+    }
+
+    private bool CanMoveDown()
+    {
+        for (int x = 0; x < GridSize; x++)
+            for (int y = GridSize - 1; y >= 0; y--)
+            {
+                if (_tiles[x, y] == null) continue;
+                for (int y2 = GridSize - 1; y2 > y; y2--)
+                {
+                    if (_tiles[x, y2] != null)
+                    {
+                        if (TileExistsBetween(x, y, x, y2))
+                            continue;
+
+                        if (_tiles[x, y2].CanMerge(_tiles[x, y]))
+                        {
+                            return true;
+                        }
+                        continue;
+                    }
+
+                    return true;
+                }
+
+            }
+        return false;
+    }
+
+    private bool CanMoveUp()
+    {
+        for (int x = 0; x < GridSize; x++)
+            for (int y = 0; y < GridSize; y++)
+            {
+                if (_tiles[x, y] == null) continue;
+                for (int y2 = 0; y2 < y; y2++)
+                {
+                    if (_tiles[x, y2] != null)
+                    {
+                        if (TileExistsBetween(x, y, x, y2))
+                            continue;
+
+                        if (_tiles[x, y2].CanMerge(_tiles[x, y]))
+                        {
+                            return true;
+                        }
+                        continue;
+                    }
+
+                    return true;
+                }
+            }
+        return false;
     }
 }
