@@ -46,3 +46,40 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  TileColors:
+  - value: 2
+    fgColor: {r: 0, g: 0, b: 0, a: 1}
+    bgColor: {r: 0.9995283, g: 1, b: 0.9858491, a: 1}
+  - value: 4
+    fgColor: {r: 0, g: 0, b: 0, a: 1}
+    bgColor: {r: 0.99746007, g: 1, b: 0.9009434, a: 1}
+  - value: 8
+    fgColor: {r: 1, g: 1, b: 1, a: 1}
+    bgColor: {r: 1, g: 0.82416457, b: 0.43867922, a: 1}
+  - value: 16
+    fgColor: {r: 1, g: 1, b: 1, a: 1}
+    bgColor: {r: 1, g: 0.6399114, b: 0.3820755, a: 1}
+  - value: 16
+    fgColor: {r: 1, g: 1, b: 1, a: 1}
+    bgColor: {r: 1, g: 0.6399114, b: 0.3820755, a: 1}
+  - value: 32
+    fgColor: {r: 1, g: 1, b: 1, a: 1}
+    bgColor: {r: 1, g: 0.4449419, b: 0.4009434, a: 1}
+  - value: 64
+    fgColor: {r: 1, g: 1, b: 1, a: 1}
+    bgColor: {r: 1, g: 0.16340971, b: 0.0990566, a: 1}
+  - value: 128
+    fgColor: {r: 1, g: 1, b: 1, a: 1}
+    bgColor: {r: 1, g: 0.94963455, b: 0.6367924, a: 1}
+  - value: 256
+    fgColor: {r: 1, g: 1, b: 1, a: 1}
+    bgColor: {r: 1, g: 0.9322071, b: 0.514151, a: 1}
+  - value: 512
+    fgColor: {r: 1, g: 1, b: 1, a: 1}
+    bgColor: {r: 1, g: 0.9190714, b: 0.41037738, a: 1}
+  - value: 1024
+    fgColor: {r: 1, g: 1, b: 1, a: 1}
+    bgColor: {r: 1, g: 0.8970588, b: 0.25, a: 1}
+  - value: 2048
+    fgColor: {r: 1, g: 1, b: 1, a: 1}
+    bgColor: {r: 1, g: 0.7334804, b: 0, a: 1}
