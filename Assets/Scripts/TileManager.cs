@@ -24,6 +24,9 @@ public class TileManager : MonoBehaviour
 
     private Stack<GameState> _gameStates = new Stack<GameState>();
 
+    private IInputManager _inputManager = new SwipeInputManager();
+
+
     private bool _isAnimating;
     private int _score;
    
@@ -35,25 +38,16 @@ public class TileManager : MonoBehaviour
         UpdateTilePositions(true);
     }
 
-    private int _lastXImput;
-    private int _lastYImput;
+   
 
     // Update is called once per frame
     void Update()
     {
-        var xInput = Mathf.RoundToInt(Input.GetAxisRaw("Horizontal"));
-        var yInput = Mathf.RoundToInt(Input.GetAxisRaw("Vertical"));
+        InputResult input = _inputManager.GetInput();
 
-        if (_lastXImput == 0 && _lastYImput == 0)
-        {
             if (!_isAnimating)
-                TryMove(xInput, yInput);
-        }
-
-        _lastXImput = xInput;
-        _lastYImput = yInput;
-
-
+                TryMove(input.XInput, input.YInput);
+               
     }
 
     public void AddScore(int value)
