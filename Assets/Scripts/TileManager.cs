@@ -24,7 +24,7 @@ public class TileManager : MonoBehaviour
 
     private Stack<GameState> _gameStates = new Stack<GameState>();
 
-    private IInputManager _inputManager = new SwipeInputManager();
+    private IInputManager _inputManager = new MultipleInputManager(new KeyboardinputManager(), new SwipeInputManager());
 
 
     private bool _isAnimating;
