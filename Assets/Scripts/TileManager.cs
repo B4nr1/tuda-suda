@@ -74,10 +74,7 @@ public class TileManager : MonoBehaviour
         var activeScene = SceneManager.GetActiveScene();
         SceneManager.LoadScene(activeScene.name);
     }
-
-        
-
-
+     
     private void GetTilePositions()
     {
         LayoutRebuilder.ForceRebuildLayoutImmediate(GetComponent<RectTransform>());
