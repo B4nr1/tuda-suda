@@ -20,6 +20,8 @@ public class TileManager : MonoBehaviour
 
     [SerializeField] private UnityEvent<int> scoreUpdated;
 
+    [SerializeField] private UnityEvent<int> bestScoreUpdated;
+
     [SerializeField] private GameOverScreen gameOverScreen;
 
     private Stack<GameState> _gameStates = new Stack<GameState>();
@@ -29,13 +31,18 @@ public class TileManager : MonoBehaviour
 
     private bool _isAnimating;
     private int _score;
-   
+
+    private int _bestScore;
+
     void Start()
     {
         GetTilePositions();
         TrySpawnTile();
         TrySpawnTile();
         UpdateTilePositions(true);
+
+        _bestScore = PlayerPrefs.GetInt("BestScore", 0);
+        bestScoreUpdated.Invoke(_bestScore);
     }
 
    
@@ -54,6 +61,12 @@ public class TileManager : MonoBehaviour
     {
         _score += value;
         scoreUpdated.Invoke(_score);
+        if(_score > _bestScore)
+        {
+            _bestScore = _score;
+            bestScoreUpdated.Invoke(_bestScore);
+            PlayerPrefs.SetInt("BestScore", _bestScore);
+        }
     }
 
     public void RestartGame()
