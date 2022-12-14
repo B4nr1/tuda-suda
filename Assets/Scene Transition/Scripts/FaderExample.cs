@@ -9,6 +9,7 @@ public class FaderExample : MonoBehaviour
 
     private const string SCENE_0 = "MenuScene";
     private const string SCENE_1 = "GameScene";
+    private const string SCENE_2 = "SettingsScene";
 
     private bool _isloading;
 
@@ -16,6 +17,7 @@ public class FaderExample : MonoBehaviour
 
     private void Awake()
     {
+        
         if (_instance != null)
         {
             Destroy(gameObject);
@@ -24,15 +26,19 @@ public class FaderExample : MonoBehaviour
 
         _instance = this;
         //DontDestroyOnLoad(gameObject);
-    }
-   
-    public void Play()
-    {
-        LoadScene(SCENE_1);
-    }
+    }  
+
     public void Menu()
     {
         LoadScene(SCENE_0);
+    }
+    public void Play()
+    {
+        LoadScene(SCENE_1);
+    }   
+    public void Settings()
+    {
+        LoadScene(SCENE_2);
     }
 
     private void LoadScene(string sceneName) 
