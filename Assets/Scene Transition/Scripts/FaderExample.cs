@@ -10,6 +10,7 @@ public class FaderExample : MonoBehaviour
     private const string SCENE_0 = "MenuScene";
     private const string SCENE_1 = "GameScene";
     private const string SCENE_2 = "SettingsScene";
+    private const string SCENE_3 = "UpInScene";
 
     private bool _isloading;
 
@@ -39,6 +40,10 @@ public class FaderExample : MonoBehaviour
     public void Settings()
     {
         LoadScene(SCENE_2);
+    } 
+    public void UpIn()
+    {
+        LoadScene(SCENE_3);
     }
 
     private void LoadScene(string sceneName) 

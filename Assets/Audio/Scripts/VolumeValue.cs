@@ -58,7 +58,7 @@ public class VolumeValue : MonoBehaviour
     {
         musicAudio.volume = musicSlider.value;
 
-        
+       
     }
 
     /* Update is called once per frame

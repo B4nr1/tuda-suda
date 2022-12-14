@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scene Transition/Scenes/SettingsScene.unity
     guid: 0f95a8eeda9d949469989d37be70fe92
+  - enabled: 1
+    path: Assets/Scene Transition/Scenes/UpInScene.unity
+    guid: 5b156fe49d7d377419493a1c01b78122
   m_configObjects: {}
